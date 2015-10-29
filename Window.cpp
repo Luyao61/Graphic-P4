@@ -30,6 +30,7 @@ std::vector<OBJObject*>* allOBJ;
 
 void Window::initialize(void)
 {
+    /*
     //Setup the Directional light
     Vector4 lightDirection(0.0, 10.0, 15.0, 0.0);  //w is zero if light source is directional
     Globals::directionLight.position = lightDirection;
@@ -38,14 +39,14 @@ void Window::initialize(void)
     Vector4 pointLightPos(0.0, 10.0, 15.0, 1.0);
     Globals::pointLight.position = pointLightPos;
     Globals::pointLight.quadraticAttenuation = 0.02;
+    */
     //Setup the spot light
-    Vector4 spotLightPos(15.0, 10.0, 0.0, 1.0);
+    Vector4 spotLightPos(20.0, 20.0, 20.0, 1.0);
     Globals::pointLight.position = spotLightPos;
     Vector3 spotLightdirection(0.0, 0.0, 0.0);
     Globals::soptLight.spot_direction = spotLightdirection;
-    Globals::soptLight.cutoffParameter = 45;
+    Globals::soptLight.cutoffParameter = 20;
     Globals::pointLight.quadraticAttenuation = 0.02;
-
 
     
     //Initialize cube matrix:
@@ -56,7 +57,7 @@ void Window::initialize(void)
     Globals::cube.material.color = color;
     
     //
-    drawCube = true;
+    drawSphere = true;
     
     //Initialize sphere matrix:
     Globals::sphere.toWorld.identity();
@@ -65,8 +66,7 @@ void Window::initialize(void)
     Globals::sphere.material.color = color;
     
     Globals::house.toWorld.identity();
-    //Globals::house.material.color = color;
-    
+
      allOBJ = new std::vector<OBJObject*>();
 
 }
@@ -85,12 +85,14 @@ void Window::idleCallback()
     Globals::cube.update(Globals::updateData);
     }
     
+    /*
     if (drawSphere == true) {
         Globals::sphere.move();
         Globals::sphere.update(Globals::updateData);
     }
     Globals::bear.spin(spinAngle);
-
+     */
+    Globals::sphere.update(Globals::updateData);
     //Call the display routine to draw the cube
     displayCallback();
 }
@@ -285,8 +287,8 @@ void Window::processSpecialKeys(int key, int x, int y) {
 
 	switch (key) {
 	case GLUT_KEY_F1:
-            drawCube = true;
-            drawSphere = false;
+            drawCube = false;
+            drawSphere = true;
             drawHouse = false;
             
             allOBJ->clear();
@@ -294,9 +296,9 @@ void Window::processSpecialKeys(int key, int x, int y) {
             Globals::camera.reset();
             break;
 	case GLUT_KEY_F2:
-            drawHouse =true;
+            drawHouse =false;
             drawSphere = false;
-            drawCube= false;
+            drawCube= true;
             
             e.set(0, 24.14, 24.14);
             d.set(0, 0, 0);

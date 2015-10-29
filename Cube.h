@@ -27,9 +27,7 @@ public:
     void moveZ();
     void scale(bool);
     void orbit(float);
-    
-    void makeRotateArbitrary(Vector3,float);
-    
+        
     void reset();
     
 };

@@ -217,9 +217,7 @@ Matrix4 Matrix4::makeRotateArbitrary(Vector3 a, float angle)
     m[0][2] = uz*ux*(1-cos(angle)) - uy*sin(angle);
     m[1][2] = uz*uy*(1-cos(angle)) + ux*sin(angle);
     m[2][2] = cos(angle) + uz*uz*(1-cos(angle));
-    
-    a.print("rotation arbitary axis");
-    
+
     return *this;
 }
 
