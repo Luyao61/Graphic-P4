@@ -25,6 +25,8 @@ public:
     virtual void draw(DrawData&);
     virtual void update(UpdateData&);
     
+    void makeRotateArbitrary(Vector3,float);
+    
 };
 
 #endif

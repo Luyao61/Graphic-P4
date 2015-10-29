@@ -183,7 +183,7 @@ Vector3 Vector3::cross(Vector3 a)
     float y = uz*vx-ux*vz;
     float z = ux*vy-uy*vx;
     
-    b = *new Vector3(x,y,z);
+    b.set(x,y,z);
     
     return b;
 }
@@ -214,12 +214,8 @@ Vector3 Vector3::normalize(void)
         x = *this->ptr() / this->magnitude();
         y = *(this->ptr()+1) / this->magnitude();
         z = *(this ->ptr()+2) / this->magnitude();
-        b= *new Vector3(x,y,z);
+        b.set(x,y,z);
     }
-    else{
-        b = *new Vector3(0.0,0.0,0.0);
-    }
-    
     return b;
 }
 

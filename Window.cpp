@@ -23,14 +23,30 @@ bool drawBear = false;
 bool drawBunny = false;
 bool drawDragon = false;
 
+Vector3 oldPoint;
+bool isDraging = false;
+
 std::vector<OBJObject*>* allOBJ;
 
 void Window::initialize(void)
 {
-    //Setup the light
-    Vector4 lightPos(0.0, 10.0, 15.0, 1.0);
-    Globals::light.position = lightPos;
-    Globals::light.quadraticAttenuation = 0.02;
+    //Setup the Directional light
+    Vector4 lightDirection(0.0, 10.0, 15.0, 0.0);  //w is zero if light source is directional
+    Globals::directionLight.position = lightDirection;
+    //Globals::light.quadraticAttenuation = 0.02;
+    //Setup the point light
+    Vector4 pointLightPos(0.0, 10.0, 15.0, 1.0);
+    Globals::pointLight.position = pointLightPos;
+    Globals::pointLight.quadraticAttenuation = 0.02;
+    //Setup the spot light
+    Vector4 spotLightPos(15.0, 10.0, 0.0, 1.0);
+    Globals::pointLight.position = spotLightPos;
+    Vector3 spotLightdirection(0.0, 0.0, 0.0);
+    Globals::soptLight.spot_direction = spotLightdirection;
+    Globals::soptLight.cutoffParameter = 45;
+    Globals::pointLight.quadraticAttenuation = 0.02;
+
+
     
     //Initialize cube matrix:
     Globals::cube.toWorld.identity();
@@ -64,7 +80,7 @@ void Window::idleCallback()
     Globals::updateData.dt = 1.0/60.0;// 60 fps
     if(drawCube == true){
     //Rotate cube; if it spins too fast try smaller values and vice versa
-    Globals::cube.spin(spinAngle);
+    //Globals::cube.spin(spinAngle);
     //Call the update function on cube
     Globals::cube.update(Globals::updateData);
     }
@@ -114,7 +130,9 @@ void Window::displayCallback()
     //Bind the light to slot 0.  We do this after the camera matrix is loaded so that
     //the light position will be treated as world coordiantes
     //(if we didn't the light would move with the camera, why is that?)
-    Globals::light.bind(0);
+    //Globals::pointLight.bind(0);
+    //Globals::directionLight.bind(1);
+    Globals::soptLight.bind(0);
     
     //Draw the cube!
     if (drawCube == true) {
@@ -273,18 +291,18 @@ void Window::processSpecialKeys(int key, int x, int y) {
             
             allOBJ->clear();
 
-        Globals::camera.reset();
-		break;
+            Globals::camera.reset();
+            break;
 	case GLUT_KEY_F2:
             drawHouse =true;
             drawSphere = false;
             drawCube= false;
             
-		e.set(0, 24.14, 24.14);
-		d.set(0, 0, 0);
-		up.set(0, 1, 0);
+            e.set(0, 24.14, 24.14);
+            d.set(0, 0, 0);
+            up.set(0, 1, 0);
 
-		Globals::camera.set(e, d, up);
+            Globals::camera.set(e, d, up);
             
             allOBJ->clear();
 
@@ -295,11 +313,11 @@ void Window::processSpecialKeys(int key, int x, int y) {
             drawCube= false;
 
 
-        e.set(-28.33,11.66, 23.33);
-        d.set(-5, 0, 0);
-        up.set(0, 1, 0.5);
+            e.set(-28.33,11.66, 23.33);
+            d.set(-5, 0, 0);
+            up.set(0, 1, 0.5);
             
-        Globals::camera.set(e, d, up);
+            Globals::camera.set(e, d, up);
             
             allOBJ->clear();
 
@@ -339,5 +357,45 @@ void Window::processSpecialKeys(int key, int x, int y) {
 }
 
 //TODO: Mouse callbacks!
+void Window::processMouse(int button, int state, int x, int y){
+    if (button == GLUT_LEFT_BUTTON) {
+        if (state == GLUT_DOWN) { // left mouse button pressed
+            isDraging = true;
+            //oldPoint = trackObjMapping(x, y);
+        }
+        else  { /* (state = GLUT_UP) */
+            isDraging = false;
+        }
+    }
 
+}
 //TODO: Mouse Motion callbacks!
+void Window::processMotion(int x, int y){
+    Vector3 currPoint;
+    Vector3 direction;
+    if (isDraging) {
+        currPoint = trackObjMapping(x, y);
+        direction = currPoint - oldPoint;
+        Vector3 rotateAxis;
+        float rotateAngle;
+        rotateAxis = currPoint.cross(oldPoint);
+        rotateAngle = oldPoint.angle(currPoint);
+
+        Globals::cube.makeRotateArbitrary(rotateAxis, rotateAngle);
+    }
+    oldPoint = currPoint;
+}
+
+Vector3 Window::trackObjMapping(int x, int y){
+    Vector3 v;
+    float d;
+    v.set((2.0*x - width)/width, (height - 2.0*y)/height, 0.0);
+    d = v.magnitude();
+    d = (d<1.0) ? d : 1.0;
+    
+    v.set((2.0*x - width)/width, (height - 2.0*y)/height, sqrtf(1.001 - d*d));
+    v = v.normalize();
+    return v;
+}
+
+

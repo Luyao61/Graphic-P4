@@ -3,6 +3,7 @@
 
 #include "Matrix4.h"
 #include "Vector4.h"
+#include "Vector3.h"
 #include "Color.h"
 #include <vector>
 
@@ -16,6 +17,7 @@ protected:
 public:
     
     Vector4 position;
+    Vector3 spot_direction;
     
     Color ambientColor;
     Color diffuseColor;
@@ -24,6 +26,7 @@ public:
     float constantAttenuation;
     float linearAttenuation;
     float quadraticAttenuation;
+    float cutoffParameter;
     
 public:
     

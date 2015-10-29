@@ -13,7 +13,9 @@ OBJObject Globals::bear("bear.obj");
 
 House Globals::house;
 
-Light Globals::light;
+Light Globals::directionLight;
+Light Globals::soptLight;
+Light Globals::pointLight;
 
 DrawData Globals::drawData;
 UpdateData Globals::updateData;

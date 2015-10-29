@@ -51,7 +51,9 @@ int main(int argc, char *argv[])
     glutSpecialFunc(Window::processSpecialKeys);
 
     //Register the callback for the mouse
+    glutMouseFunc(Window::processMouse);
     //Register the callback for the mouse motion
+    glutMotionFunc(Window::processMotion);
     //Register the callback for the mouse passive motion
     
     //Print Shader Debug Information:
