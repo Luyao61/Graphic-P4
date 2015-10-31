@@ -17,7 +17,7 @@ public:
     
     static Camera camera;
     static Cube cube;
-    //static Light light;
+    static Light light;
     static Light directionLight;
     static Light pointLight;
     static Light soptLight;

@@ -44,9 +44,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		097498E11BC4E11600742D07 /* bear.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = bear.obj; sourceTree = SOURCE_ROOT; };
-		097498E21BC4E11600742D07 /* bunny.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = bunny.obj; sourceTree = SOURCE_ROOT; };
-		097498E31BC4E11600742D07 /* dragon.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dragon.obj; sourceTree = SOURCE_ROOT; };
 		09E2CCBD1BC448850013579B /* House.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = House.cpp; sourceTree = SOURCE_ROOT; };
 		09E2CCBE1BC448850013579B /* House.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = House.hpp; sourceTree = SOURCE_ROOT; };
 		D40AFA7E1AD1E2E7008D61CC /* Shader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Shader.cpp; sourceTree = SOURCE_ROOT; };
@@ -125,9 +122,6 @@
 		D42FFC201AAFC90E006F8E9C /* Graphics-P4 */ = {
 			isa = PBXGroup;
 			children = (
-				097498E11BC4E11600742D07 /* bear.obj */,
-				097498E21BC4E11600742D07 /* bunny.obj */,
-				097498E31BC4E11600742D07 /* dragon.obj */,
 				D42FFC631AB67F52006F8E9C /* main.cpp */,
 				D42FFC2C1AAFCC9C006F8E9C /* Window.cpp */,
 				D42FFC301AAFCC9C006F8E9C /* Window.h */,
@@ -323,6 +317,15 @@
 		D42FFC281AAFC90E006F8E9C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"\"/opt/X11/include\"",
+					"\"/usr/local/include\"",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"\"/opt/X11/lib\"",
+					"\"/usr/local/lib\"",
+				);
+				OTHER_LDFLAGS = "-lGLUT";
 				PRODUCT_NAME = "Graphics-P4";
 			};
 			name = Debug;
@@ -330,6 +333,15 @@
 		D42FFC291AAFC90E006F8E9C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"\"/opt/X11/include\"",
+					"\"/usr/local/include\"",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"\"/opt/X11/lib\"",
+					"\"/usr/local/lib\"",
+				);
+				OTHER_LDFLAGS = "-lGLUT";
 				PRODUCT_NAME = "Graphics-P4";
 			};
 			name = Release;

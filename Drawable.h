@@ -6,6 +6,7 @@
 #include "DrawData.h"
 #include "UpdateData.h"
 #include "Material.h"
+#include "Vector4.h"
 #include <float.h>
 #include <math.h>
 #include <vector>
@@ -18,6 +19,7 @@ public:
     
     Matrix4 toWorld;
     Material material;
+    Vector4 center;
     
     Drawable(void);
     ~Drawable(void);
@@ -26,6 +28,7 @@ public:
     virtual void update(UpdateData&);
     
     void makeRotateArbitrary(Vector3,float);
+    void makeTranslate(float,float,float);
     
 };
 

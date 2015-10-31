@@ -19,6 +19,7 @@ House Globals::house;
 Light Globals::directionLight;
 Light Globals::soptLight;
 Light Globals::pointLight;
+Light Globals::light;
 
 DrawData Globals::drawData;
 UpdateData Globals::updateData;

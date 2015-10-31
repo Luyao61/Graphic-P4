@@ -24,30 +24,40 @@ bool drawBunny = false;
 bool drawDragon = false;
 
 Vector3 oldPoint;
+float oldX, oldY;
 bool isDraging = false;
+bool rightButton = false;
+bool leftButton = false;
 
 std::vector<OBJObject*>* allOBJ;
 
 void Window::initialize(void)
 {
-    /*
+    
     //Setup the Directional light
     Vector4 lightDirection(0.0, 10.0, 15.0, 0.0);  //w is zero if light source is directional
     Globals::directionLight.position = lightDirection;
-    //Globals::light.quadraticAttenuation = 0.02;
+    
     //Setup the point light
-    Vector4 pointLightPos(0.0, 10.0, 15.0, 1.0);
+    Vector4 pointLightPos(0.0, -10.0, 15.0, 1.0);
     Globals::pointLight.position = pointLightPos;
     Globals::pointLight.quadraticAttenuation = 0.02;
-    */
+    
+    
     //Setup the spot light
-    Vector4 spotLightPos(20.0, 20.0, 20.0, 1.0);
-    Globals::pointLight.position = spotLightPos;
-    Vector3 spotLightdirection(0.0, 0.0, 0.0);
-    Globals::soptLight.spot_direction = spotLightdirection;
+    Vector4 spotLightPos(0.0, 20.0, 20.0, 1.0);
+    Globals::soptLight.position = spotLightPos;
+    Vector3 spotLightDirection(0.0, 0.0, 0.0);
+    Globals::soptLight.spot_direction = spotLightDirection;
     Globals::soptLight.cutoffParameter = 20;
-    Globals::pointLight.quadraticAttenuation = 0.02;
-
+    Globals::soptLight.quadraticAttenuation = 0.02;
+    
+    /*
+    //Setup the light
+    Vector4 lightPos(0.0, 10.0, 15.0, 1.0);
+    Globals::light.position = lightPos;
+    Globals::light.quadraticAttenuation = 0.02;
+     */
     
     //Initialize cube matrix:
     Globals::cube.toWorld.identity();
@@ -132,9 +142,15 @@ void Window::displayCallback()
     //Bind the light to slot 0.  We do this after the camera matrix is loaded so that
     //the light position will be treated as world coordiantes
     //(if we didn't the light would move with the camera, why is that?)
-    //Globals::pointLight.bind(0);
-    //Globals::directionLight.bind(1);
-    Globals::soptLight.bind(0);
+    Globals::pointLight.bind(0);
+
+    Globals::directionLight.bind(1);
+
+    Globals::soptLight.bind(2);
+    
+    //Globals::light.bind(0);
+    
+    
     
     //Draw the cube!
     if (drawCube == true) {
@@ -171,91 +187,8 @@ void Window::displayCallback()
 //TODO: Keyboard callbacks!
 void Window::processNormalKeys(unsigned char key, int x, int y) {
 
-    if (key == 'c') {
-        spinAngle *= -1;
-    }
-    else if (key == 27) {
+    if (key == 27) {
         exit(0);
-    }
-    else if(key == 'x'){
-        if (drawCube == true) {
-            Globals::cube.movex();
-        }
-        else {
-            allOBJ->back()->movex();
-        }
-    }
-    else if(key == 'X'){
-        if (drawCube == true) {
-            Globals::cube.moveX();
-        }
-        else {
-            allOBJ->back()->moveX();
-        }
-    }
-    else if(key == 'y'){
-        if (drawCube == true) {
-            Globals::cube.movey();
-        }
-        else {
-            allOBJ->back()->movey();
-        }
-    }
-    else if(key == 'Y'){
-        if (drawCube == true) {
-            Globals::cube.moveY();
-        }
-        else {
-            allOBJ->back()->moveY();
-        }
-    }
-    else if(key == 'z'){
-        if (drawCube == true) {
-            Globals::cube.movez();
-        }
-        else {
-            allOBJ->back()->movez();
-        }
-    }
-    else if(key == 'Z'){
-        if (drawCube == true) {
-            Globals::cube.moveZ();
-        }
-        else {
-            allOBJ->back()->moveZ();
-        }
-    }
-    else if(key == 'o'){
-        if (drawCube == true) {
-            Globals::cube.orbit(orbitAngle);
-        }
-        else {
-            allOBJ->back()->orbit(orbitAngle);
-        }
-    }
-    else if(key == 'O'){
-        if (drawCube == true) {
-            Globals::cube.orbit(-orbitAngle);
-        }
-        else {
-            allOBJ->back()->orbit(-orbitAngle);
-        }
-    }
-    else if(key == 's'){
-        if (drawCube == true) {
-            Globals::cube.scale(false);
-        }
-        else {
-            allOBJ->back()->scale(false);
-        }
-    }
-    else if(key == 'S'){
-        if (drawCube == true) {
-            Globals::cube.scale(true);
-        }
-        else {
-            allOBJ->back()->scale(true);
-        }
     }
     else if(key == 'r'){
         if (spinAngle < 0) {
@@ -267,16 +200,6 @@ void Window::processNormalKeys(unsigned char key, int x, int y) {
         Globals::bear.reset();
         Globals::bunny.reset();
     }
-    else if (key == 'b'){
-        drawSphere = true;
-        drawCube = false;
-        drawHouse = false;
-		drawBear = drawBunny = drawDragon = false;
-
-        Globals::sphere.reset();
-    }
-
-
 }
 
 
@@ -303,8 +226,6 @@ void Window::processSpecialKeys(int key, int x, int y) {
             e.set(0, 24.14, 24.14);
             d.set(0, 0, 0);
             up.set(0, 1, 0);
-
-            Globals::camera.set(e, d, up);
             
             allOBJ->clear();
 
@@ -313,16 +234,7 @@ void Window::processSpecialKeys(int key, int x, int y) {
             drawHouse =true;
             drawSphere = false;
             drawCube= false;
-
-
-            e.set(-28.33,11.66, 23.33);
-            d.set(-5, 0, 0);
-            up.set(0, 1, 0.5);
             
-            Globals::camera.set(e, d, up);
-            
-            allOBJ->clear();
-
 		break;
 	case GLUT_KEY_F4:
             drawBunny = true;
@@ -363,31 +275,52 @@ void Window::processMouse(int button, int state, int x, int y){
     if (button == GLUT_LEFT_BUTTON) {
         if (state == GLUT_DOWN) { // left mouse button pressed
             isDraging = true;
-            //oldPoint = trackObjMapping(x, y);
+            leftButton = true;
         }
         else  { /* (state = GLUT_UP) */
             isDraging = false;
+            leftButton = false;
         }
     }
-
+    else if (button == GLUT_RIGHT_BUTTON){
+        if (state == GLUT_DOWN) { // left mouse button pressed
+            isDraging = true;
+            rightButton = true;
+            
+            oldX = x;
+            oldY = y;
+        }
+        else  { /* (state = GLUT_UP) */
+            isDraging = false;
+            rightButton = false;
+        }
+    }
 }
 //TODO: Mouse Motion callbacks!
 void Window::processMotion(int x, int y){
     Vector3 currPoint;
     Vector3 direction;
     if (isDraging) {
-        currPoint = trackObjMapping(x, y);
-        direction = currPoint - oldPoint;
-        Vector3 rotateAxis;
-        float rotateAngle;
-        rotateAxis = currPoint.cross(oldPoint);
-        rotateAngle = oldPoint.angle(currPoint);
-
-        Globals::cube.makeRotateArbitrary(rotateAxis, rotateAngle);
+        if (leftButton && !rightButton) {
+            currPoint = trackObjMapping(x, y);
+            direction = currPoint - oldPoint;
+            Vector3 rotateAxis;
+            float rotateAngle;
+            rotateAxis = currPoint.cross(oldPoint);
+            rotateAngle = oldPoint.angle(currPoint);
+            
+            Globals::cube.makeRotateArbitrary(rotateAxis, rotateAngle);
+        }
+        else if(!leftButton && rightButton){
+            Globals::cube.makeTranslate((x-oldX)/10.0, (oldY - y)/10.0, 0.0);
+        }
     }
     oldPoint = currPoint;
+    oldX = x;
+    oldY = y;
 }
 
+//map 2D coordinate to real world 3D coordinate
 Vector3 Window::trackObjMapping(int x, int y){
     Vector3 v;
     float d;

@@ -9,9 +9,7 @@ class Cube : public Drawable
     
 public:
     
-    float size;
-    Vector4 center = * new Vector4(0,0,0,1);
-    
+    float size;    
     Cube(float);
     virtual ~Cube(void);
     
